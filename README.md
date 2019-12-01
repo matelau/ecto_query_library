@@ -7,9 +7,9 @@ For the full story behind this project and the queries start here [Diving into E
 # Versions
 _The query library is currently built using the following setup._
 
- - Elixir 1.4
- - Ecto 2.1
- - Postgres 9.4
+ - Elixir 1.9
+ - Ecto_SQL 3.2
+ - Postgres 12
 
 # Table of Contents
 
