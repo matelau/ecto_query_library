@@ -8,12 +8,12 @@ defmodule FishingSpot.QueriesTest do
   alias FishingSpot.FishLanded
 
   setup do
-   :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
-   Repo.insert(%FishLanded{length: Decimal.new(1.0)})
-   :ok
+    :ok = Ecto.Adapters.SQL.Sandbox.checkout(Repo)
+    Repo.insert(%FishLanded{length: Decimal.cast(1.0)})
+    :ok
   end
 
-  queries =  [
+  queries = [
     &Queries.all_fishermen/0,
     &Queries.ordered_fishermen/0,
     &Queries.biggest_fish/0,
@@ -38,10 +38,10 @@ defmodule FishingSpot.QueriesTest do
     &Queries.biggest_fish_per_fisherman_having/0,
     &Queries.all_fish_limit_10/0,
     &Queries.all_fish_limit_10_offset_half/0,
-    &Queries.biggest_fish_catcher_join/0,
+    &Queries.biggest_fish_catcher_join/0
   ]
 
-  Enum.each(queries, fn(query)->
+  Enum.each(queries, fn query ->
     test "testing #{inspect(query)}" do
       capture_io(unquote(query))
     end
