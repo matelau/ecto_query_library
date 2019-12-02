@@ -9,13 +9,29 @@ defmodule FishingSpot.FishermanTest do
   alias FishingSpot.Fisherman
 
   describe "FishermanEctoChangesetsTests" do
-    test "Casts values to proper type" do
+    test "changeset casts values to proper type" do
       params = %{name: "some-name", date_of_birth: "2017-10-10"}
       {:ok, fisherman} = Fisherman.changeset(%Fisherman{}, params) |> Repo.insert()
       assert fisherman.date_of_birth == ~D[2017-10-10]
     end
 
-    test "requires date of birth" do
+    test "changeset requires date of birth" do
+      params = %{name: "some-name"}
+      {:error, changeset} = Fisherman.changeset(%Fisherman{}, params) |> Repo.insert()
+      assert changeset.errors == [date_of_birth: {"can't be blank", [validation: :required]}]
+    end
+
+    test "changeset casts associations values to proper type" do
+      params = %{
+        name: "some-name",
+        date_of_birth: "2017-10-10",
+        fish_landed: [%{date_and_time: "2019-12-02T17:42:18+00:00", weight: 20, length: 10}]
+      }
+
+      {:ok, fisherman} = Fisherman.changeset(%Fisherman{}, params) |> Repo.insert()
+      fish_landed = fisherman.fish_landed
+      assert Enum.count(fish_landed) == 1
+      assert List.first(fish_landed).weight == Decimal.cast(20)
     end
   end
 
