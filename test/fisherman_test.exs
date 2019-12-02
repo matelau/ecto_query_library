@@ -27,5 +27,12 @@ defmodule FishingSpot.FishermanTest do
       result = List.first(results)
       assert result == "something_unique"
     end
+
+    test "select fisherman name and date of birth tuple" do
+      fisherman = insert(:fisherman, name: "name", date_of_birth: "2000-10-01")
+      # Update context to return proper result
+      result = Fish.get_fisherman_name_and_date_of_birth(fisherman.id, :tuple)
+      assert result == {"name", ~D[2000-10-01]}
+    end
   end
 end
