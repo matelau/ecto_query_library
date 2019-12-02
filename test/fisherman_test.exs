@@ -6,8 +6,20 @@ defmodule FishingSpot.FishermanTest do
   use FishingSpot.DataCase
   import EctoQueryLibray.Factory
   alias FishingSpot.Context.Fish
+  alias FishingSpot.Fisherman
 
-  describe "FishermanEctoTests" do
+  describe "FishermanEctoChangesetsTests" do
+    test "Casts values to proper type" do
+      params = %{name: "some-name", date_of_birth: "2017-10-10"}
+      {:ok, fisherman} = Fisherman.changeset(%Fisherman{}, params) |> Repo.insert()
+      assert fisherman.date_of_birth == ~D[2017-10-10]
+    end
+
+    test "requires date of birth" do
+    end
+  end
+
+  describe "FishermanEctoQueryTests" do
     test "Get Fisherman" do
       fisherman = insert(:fisherman)
       # Update context to return proper result
