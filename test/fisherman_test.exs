@@ -1,6 +1,6 @@
 defmodule FishingSpot.FishermanTest do
   @moduledoc """
-
+    Fishermen Tests
   """
 
   use FishingSpot.DataCase
