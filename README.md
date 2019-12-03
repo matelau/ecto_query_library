@@ -11,6 +11,12 @@ _The query library is currently built using the following setup._
  - Ecto_SQL 3.2
  - Postgres 12
 
+# Test Instructions
+_Master includes broken tests it is up to you to make these tests pass. Use the examples in this readme to solve and goto the branch `solutions` if you get stuck.
+- Tests to update include `FishermanTest`, `FishLandedTest`. Theses tests depend on `Context.Fish`, `Fisherman`, and `FishLanded`.
+- You will have to update queries and changesets
+- Start with FishermanTest `FishermanEctoChangesetsTests` as later solutions depend on earlier solutions. Then work on FishLandedTest and finally complete FishermanTest `FishermanEctoQueryTests`.
+
 # Table of Contents
 
 - [Select Styles](#selects)
@@ -395,7 +401,7 @@ _Demonstrates the use of `not` to negate an in clause._
 ```elixir
 from fish in FishLanded,
 join: fisherman in assoc(fish, :fisherman),
-where: not fisherman.name in ["Mark", "Kirk"],
+where: fisherman.name not in ["Mark", "Kirk"],
 group_by: fisherman.name,
 order_by: fisherman.name,
 select: %{biggest_fish: max(fish.length), fisherman: fisherman.name}

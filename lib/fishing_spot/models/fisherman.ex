@@ -4,7 +4,7 @@ defmodule FishingSpot.Fisherman do
   alias FishingSpot.FishermanTrip
   alias FishingSpot.FishLanded
 
-  @fields [:name, :date_of_birth]
+  @fields [:name]
 
   schema "fishermen" do
     timestamps()
@@ -20,8 +20,6 @@ defmodule FishingSpot.Fisherman do
   def changeset(model, params) do
     model
     |> cast(params, @fields)
-    |> cast_assoc(:fish_landed)
-    |> validate_required([:date_of_birth])
-    |> unique_constraint(:name, name: :fishermen_name)
+    |> validate_required([])
   end
 end
