@@ -50,5 +50,18 @@ defmodule FishingSpot.FishLandedTest do
       count = FishLanded |> FishLanded.count_long_fish() |> Repo.one()
       assert count == 1
     end
+
+    test "with fisherman preloaded" do
+      fisherman = insert(:fisherman, name: "Joe")
+      fl = insert(:fish_landed, length: 10.0, fisherman: fisherman)
+      insert(:fish_landed, length: 11.5)
+      insert(:fish_landed, length: 22.5)
+      insert(:fish_landed, length: 33.0)
+
+      fish_landed =
+        FishLanded |> FishLanded.by_id(fl.id) |> FishLanded.with_fisherman() |> Repo.one()
+
+      assert fish_landed.fisherman.name == "Joe"
+    end
   end
 end

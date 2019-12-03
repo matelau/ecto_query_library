@@ -73,7 +73,6 @@ defmodule FishingSpot.FishermanTest do
       insert(:fisherman, name: "test_3", date_of_birth: "2017-10-11")
       insert(:fisherman, name: "test_4", date_of_birth: "2017-10-11")
       insert(:fisherman, name: "something_unique", date_of_birth: "2017-10-02")
-      # Update context to return proper result
       results = Fish.get_unique_fishermen_dob()
       assert Enum.count(results) == 2
       # These should be in order
@@ -83,21 +82,18 @@ defmodule FishingSpot.FishermanTest do
 
     test "select fisherman name and date of birth tuple" do
       fisherman = insert(:fisherman, name: "name", date_of_birth: "2000-10-01")
-      # Update context to return proper result
       result = Fish.get_fisherman_name_and_date_of_birth(fisherman.id, :tuple)
       assert result == {"name", ~D[2000-10-01]}
     end
 
     test "select fisherman name and date of birth map" do
       fisherman = insert(:fisherman, name: "name", date_of_birth: "2000-10-01")
-      # Update context to return proper result
       result = Fish.get_fisherman_name_and_date_of_birth(fisherman.id, :map)
       assert result == %{dob: ~D[2000-10-01], name: "name"}
     end
 
     test "select fisherman name and date of birth list" do
       fisherman = insert(:fisherman, name: "name", date_of_birth: "2000-10-01")
-      # Update context to return proper result
       result = Fish.get_fisherman_name_and_date_of_birth(fisherman.id, :list)
       assert result == ["name", ~D[2000-10-01]]
     end

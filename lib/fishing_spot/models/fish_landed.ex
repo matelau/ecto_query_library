@@ -24,6 +24,10 @@ defmodule FishingSpot.FishLanded do
     |> cast(params, @fields)
   end
 
+  def by_id(query, fish_landed_id) do
+    from(fl in query, where: fl.id == ^fish_landed_id)
+  end
+
   def largest_fish(query) do
     from(fl in query, select: max(fl.weight))
   end
@@ -38,5 +42,13 @@ defmodule FishingSpot.FishLanded do
 
   def count_long_fish(query) do
     from(fl in query, select: count(fl.id), where: fl.length > @long_fish_min_length)
+  end
+
+  def with_fisherman(query) do
+    from(fl in query,
+      join: fisherman in Fisherman,
+      on: fl.fisherman_id == fisherman.id,
+      preload: [fisherman: fisherman]
+    )
   end
 end
