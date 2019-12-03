@@ -5,7 +5,7 @@ defmodule FishingSpot.Account do
   alias FishingSpot.Deposit
   @fields [:identifier, :name]
 
-  schema "accounts" do
+  embedded_schema do
     timestamps()
     field(:identifier, :string)
     field(:name, :string)
@@ -15,14 +15,6 @@ defmodule FishingSpot.Account do
   def changeset(model, params \\ :empty) do
     model
     |> cast(params, @fields)
-    |> cast_deposit()
-  end
-
-  defp cast_deposit(changeset) do
-    if(is_nil(get_field(changeset, :deposit))) do
-      changeset
-    else
-      cast_embed(changeset, :deposit)
-    end
+    |> cast_embed(:deposit)
   end
 end

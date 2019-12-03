@@ -3,6 +3,7 @@ defmodule FishingSpot.AccountTest do
   """
   use FishingSpot.DataCase
   alias FishingSpot.Account
+  alias Ecto.Changeset
 
   describe "" do
     test "changeset casts embedded values to proper type" do
@@ -12,8 +13,10 @@ defmodule FishingSpot.AccountTest do
         deposit: %{amount: 500}
       }
 
-      {:ok, account} = Account.changeset(%Account{}, params) |> Repo.insert()
-      assert account.deposit == 500
+      account =
+        %Account{} |> Account.changeset(params) |> Changeset.apply_changes() |> IO.inspect()
+
+      assert account.deposit.amount == Decimal.cast(500)
     end
   end
 end

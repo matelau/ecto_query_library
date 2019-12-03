@@ -9,8 +9,8 @@ defmodule FishingSpot.FishLandedTest do
 
   describe "FishLandedEctoTests" do
     test "Get FishLanded" do
-        fish_landed = insert(:fish_landed)
-        assert fish_landed == ""
+      fish_landed = insert(:fish_landed)
+      assert fish_landed.weight == Decimal.cast(1.0)
     end
-end
+  end
 end
