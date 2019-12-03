@@ -18,7 +18,7 @@ defmodule EctoQueryLibray.Factory do
       date_and_time: DateTime.utc_now(),
       weight: Decimal.cast(1.0),
       length: Decimal.cast(1.0),
-      fisherman: insert(:fisherman),
+      fisherman: insert(:fisherman, name: sequence(:name, &"name-#{&1}")),
       location: insert(:location),
       fly_type: insert(:fly_type),
       fish_species: insert(:fish_species)
