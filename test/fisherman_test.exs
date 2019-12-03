@@ -67,17 +67,17 @@ defmodule FishingSpot.FishermanTest do
       assert result == "Fisherman"
     end
 
-    test "Select Unique Fishermen Names" do
-      insert(:fisherman, name: "test_1")
-      insert(:fisherman, name: "test_2")
-      insert(:fisherman, name: "test_3")
-      insert(:fisherman, name: "test_4")
-      insert(:fisherman, name: "something_unique")
+    test "Select unique fishermen date_of_birth" do
+      insert(:fisherman, name: "test_1", date_of_birth: "2017-10-01")
+      insert(:fisherman, name: "test_2", date_of_birth: "2017-10-01")
+      insert(:fisherman, name: "test_3", date_of_birth: "2017-10-01")
+      insert(:fisherman, name: "test_4", date_of_birth: "2017-10-01")
+      insert(:fisherman, name: "something_unique", date_of_birth: "2017-10-02")
       # Update context to return proper result
-      results = Fish.get_unique_fishermen_names()
-      # assert Enum.count(results) == 1
+      results = Fish.get_unique_fishermen_dob()
+      assert Enum.count(results) == 2
       result = List.first(results)
-      assert result == "something_unique"
+      assert result == ~D[2017-10-01]
     end
 
     test "select fisherman name and date of birth tuple" do

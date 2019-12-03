@@ -35,8 +35,8 @@ defmodule FishingSpot.Context.Fish do
     Repo.one(query)
   end
 
-  def get_unique_fishermen_names() do
-    query = from(f in Fisherman, select: f.name, distinct: f.name)
+  def get_unique_fishermen_dob() do
+    query = from(f in Fisherman, select: f.date_of_birth, distinct: f.date_of_birth)
     Repo.all(query)
   end
 end
