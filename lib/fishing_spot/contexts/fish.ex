@@ -82,4 +82,16 @@ defmodule FishingSpot.Context.Fish do
 
     Repo.one(query)
   end
+
+  def get_the_last_ten_fish_landed_by_fisherman(fisherman_id) do
+    query =
+      from(fish in FishLanded,
+        where: fish.fisherman_id == ^fisherman_id,
+        order_by: [desc: fish.id],
+        limit: 10,
+        select: fish.id
+      )
+
+    Repo.all(query)
+  end
 end
