@@ -144,11 +144,10 @@ defmodule FishingSpot.FishermanTest do
       fisherman = insert(:fisherman)
 
       Enum.each(0..99, fn _ ->
-        random_number = :rand.uniform(100)
-        insert(:fish_landed, length: random_number, fisherman: fisherman)
+        insert(:fish_landed, fisherman: fisherman)
       end)
 
-      result = Fish.get_the_last_ten_fish_landed_by_fisherman(fisherman.id) |> IO.inspect()
+      result = Fish.get_the_last_ten_fish_landed_by_fisherman(fisherman.id)
       assert Enum.count(result) == 10
 
       result
@@ -157,6 +156,24 @@ defmodule FishingSpot.FishermanTest do
         if(ind > 0) do
           assert val < Enum.at(result, ind - 1)
         end
+      end)
+    end
+
+    test "" do
+      Enum.each(0..2, fn x ->
+        fisherman = insert(:fisherman, name: "fisherman_#{x}")
+
+        Enum.each(0..9, fn _ ->
+          random_number = :rand.uniform(100)
+          insert(:fish_landed, length: random_number, fisherman: fisherman)
+        end)
+      end)
+
+      result = Fish.favorite_lure_by_species_and_lure_with_longest_fish("Trout", "Yummy")
+      assert length(result) == 3
+
+      Enum.each(result, fn %{length: l} ->
+        assert l > 0
       end)
     end
   end

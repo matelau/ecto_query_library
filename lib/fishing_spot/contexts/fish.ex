@@ -94,4 +94,24 @@ defmodule FishingSpot.Context.Fish do
 
     Repo.all(query)
   end
+
+  def favorite_lure_by_species_and_lure_with_longest_fish(fish_species, fly_type) do
+    query =
+      from(fish in FishLanded,
+        join: fly_type in assoc(fish, :fly_type),
+        join: fish_species in assoc(fish, :fish_species),
+        join: fisherman in assoc(fish, :fisherman),
+        where: fish_species.name == ^fish_species,
+        where: fly_type.name == ^fly_type,
+        group_by: [fish_species.name, fly_type.name, fisherman.name],
+        select: %{
+          length: max(fish.length),
+          fish_type: fish_species.name,
+          fly: fly_type.name,
+          fisherman: fisherman.name
+        }
+      )
+
+    Repo.all(query)
+  end
 end
