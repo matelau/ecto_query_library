@@ -4,10 +4,10 @@ defmodule FishingSpot.Trip do
 
   schema "trips" do
     timestamps()
-    field :start_date,  :date
-    field :end_date,    :date
+    field(:start_date, :date)
+    field(:end_date, :date)
 
-    has_many :locations_trips, LocationTrip
-    has_many :locations, through: [:locations_trips, :location]
+    has_many(:locations_trips, LocationTrip)
+    has_many(:locations, through: [:locations_trips, :location])
   end
 end

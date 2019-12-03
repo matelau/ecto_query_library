@@ -2,14 +2,30 @@ defmodule FishingSpot.Account do
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "accounts" do
+  alias FishingSpot.Deposit
+  @fields [:identifier, :name]
+
+  embedded_schema do
     timestamps()
-    field :identifier, :string
-    field :name,       :string
+    field(:identifier, :string)
+    field(:name, :string)
+    embeds_one(:deposit, Deposit)
   end
 
   def changeset(model, params \\ :empty) do
     model
-    |> cast(params, ~w(identifier, name))
+    |> cast(params, @fields)
+    |> cast_embed(:deposit)
+    |> validate_exclusion(:name, ~w(joe pugliano))
+    |> validate_inclusion(:identifier, ~w(account_id))
+    |> custom_validation()
+  end
+
+  defp custom_validation(changeset) do
+    if get_change(changeset, :identifier, "") == "" do
+      add_error(changeset, :identifier, "empty")
+    else
+      changeset
+    end
   end
 end
