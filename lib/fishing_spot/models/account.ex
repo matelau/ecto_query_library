@@ -16,5 +16,15 @@ defmodule FishingSpot.Account do
     model
     |> cast(params, @fields)
     |> cast_embed(:deposit)
+    |> validate_exclusion(:name, ~w(joe pugliano))
+    |> custom_validation()
+  end
+
+  defp custom_validation(changeset) do
+    if get_change(changeset, :identifier, "") == "" do
+      add_error(changeset, :identifier, "empty")
+    else
+      changeset
+    end
   end
 end

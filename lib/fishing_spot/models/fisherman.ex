@@ -22,5 +22,6 @@ defmodule FishingSpot.Fisherman do
     |> cast(params, @fields)
     |> cast_assoc(:fish_landed)
     |> validate_required([:date_of_birth])
+    |> unique_constraint(:name, name: :fishermen_name)
   end
 end

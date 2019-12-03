@@ -6,6 +6,42 @@ defmodule FishingSpot.AccountTest do
   alias Ecto.Changeset
 
   describe "" do
+    test "create struct from changeset" do
+      params = %{
+        name: "some-name",
+        identifier: "account_id",
+        deposit: %{amount: 500}
+      }
+
+      account = %Account{} |> Account.changeset(params) |> Changeset.apply_changes()
+
+      assert %Account{} = account
+    end
+
+    test "exclusion test" do
+      params = %{
+        name: "joe",
+        identifier: "account_id"
+      }
+
+      changeset = %Account{} |> Account.changeset(params)
+
+      assert changeset.errors == [
+               name: {"is reserved", [validation: :exclusion, enum: ["joe", "pugliano"]]}
+             ]
+    end
+
+    test "custom validator test" do
+      params = %{
+        name: "hello",
+        identifier: ""
+      }
+
+      changeset = %Account{} |> Account.changeset(params)
+
+      assert changeset.errors == [identifier: {"empty", []}]
+    end
+
     test "changeset casts embedded values to proper type" do
       params = %{
         name: "some-name",
@@ -13,9 +49,7 @@ defmodule FishingSpot.AccountTest do
         deposit: %{amount: 500}
       }
 
-      account =
-        %Account{} |> Account.changeset(params) |> Changeset.apply_changes() |> IO.inspect()
-
+      account = %Account{} |> Account.changeset(params) |> Changeset.apply_changes()
       assert account.deposit.amount == Decimal.cast(500)
     end
   end

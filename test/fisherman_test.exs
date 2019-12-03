@@ -33,6 +33,23 @@ defmodule FishingSpot.FishermanTest do
       assert Enum.count(fish_landed) == 1
       assert List.first(fish_landed).weight == Decimal.cast(20)
     end
+
+    test "changeset error includes constraints" do
+      params = %{
+        name: "some-name",
+        date_of_birth: "2017-10-10",
+        fish_landed: [%{date_and_time: "2019-12-02T17:42:18+00:00", weight: 20, length: 10}]
+      }
+
+      {:ok, _fisherman} = Fisherman.changeset(%Fisherman{}, params) |> Repo.insert()
+      {:error, results} = Fisherman.changeset(%Fisherman{}, params) |> Repo.insert()
+
+      assert results.errors == [
+               name:
+                 {"has already been taken",
+                  [constraint: :unique, constraint_name: "fishermen_name"]}
+             ]
+    end
   end
 
   describe "FishermanEctoQueryTests" do
@@ -51,10 +68,10 @@ defmodule FishingSpot.FishermanTest do
     end
 
     test "Select Unique Fishermen Names" do
-      insert(:fisherman, name: "test")
-      insert(:fisherman, name: "test")
-      insert(:fisherman, name: "test")
-      insert(:fisherman, name: "test")
+      insert(:fisherman, name: "test_1")
+      insert(:fisherman, name: "test_2")
+      insert(:fisherman, name: "test_3")
+      insert(:fisherman, name: "test_4")
       insert(:fisherman, name: "something_unique")
       # Update context to return proper result
       results = Fish.get_unique_fishermen_names()
