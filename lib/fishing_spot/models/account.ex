@@ -17,6 +17,7 @@ defmodule FishingSpot.Account do
     |> cast(params, @fields)
     |> cast_embed(:deposit)
     |> validate_exclusion(:name, ~w(joe pugliano))
+    |> validate_inclusion(:identifier, ~w(account_id))
     |> custom_validation()
   end
 

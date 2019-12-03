@@ -31,6 +31,19 @@ defmodule FishingSpot.AccountTest do
              ]
     end
 
+    test "inclusion test" do
+      params = %{
+        name: "check",
+        identifier: "identification"
+      }
+
+      changeset = %Account{} |> Account.changeset(params)
+
+      assert changeset.errors == [
+               identifier: {"is invalid", [validation: :inclusion, enum: ["account_id"]]}
+             ]
+    end
+
     test "custom validator test" do
       params = %{
         name: "hello",
