@@ -101,5 +101,31 @@ defmodule FishingSpot.FishermanTest do
       result = Fish.get_fisherman_name_and_date_of_birth(fisherman.id, :list)
       assert result == ["name", ~D[2000-10-01]]
     end
+
+    test "Get each Fishermans longest fish" do
+      Enum.each(0..9, fn _ ->
+        random_number = :rand.uniform(100)
+        insert(:fish_landed, length: random_number)
+      end)
+
+      insert(:fish_landed, length: 200, fisherman: %{name: "Johnny"})
+
+      result = Fish.get_longest_fish_by_fisherman_sorted()
+      assert List.first(result) == %{fisherman_name: "Johnny", max_fish_length: Decimal.cast(200)}
+    end
+
+    test "Get fisherman that have caught more than x fish" do
+      fisherman = insert(:fisherman)
+
+      Enum.each(0..9, fn _ ->
+        insert(:fish_landed, fisherman: fisherman)
+      end)
+
+      insert(:fish_landed, length: 200, fisherman: %{name: "Johnny"})
+
+      result = Fish.get_fishermen_whom_caught_more_than_2_fish()
+      assert Enum.count(result) == 1
+      assert List.first(result) == %{fisherman_name: "Fisherman", count: 10}
+    end
   end
 end
