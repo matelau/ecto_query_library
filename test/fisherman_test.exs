@@ -123,9 +123,21 @@ defmodule FishingSpot.FishermanTest do
 
       insert(:fish_landed, length: 200, fisherman: %{name: "Johnny"})
 
-      result = Fish.get_fishermen_whom_caught_more_than_2_fish()
+      result = Fish.get_fishermen_whom_caught_more_than_x_fish(5)
       assert Enum.count(result) == 1
       assert List.first(result) == %{fisherman_name: "Fisherman", count: 10}
+    end
+
+    test "Get the fisherman with the biggest fish in one query" do
+      Enum.each(0..9, fn _ ->
+        random_number = :rand.uniform(100)
+        insert(:fish_landed, length: random_number)
+      end)
+
+      insert(:fish_landed, length: 200, fisherman: %{name: "Johnny"})
+
+      result = Fish.get_fisherman_with_biggest_fish()
+      assert result == %{length: Decimal.cast(200), name: "Johnny"}
     end
   end
 end

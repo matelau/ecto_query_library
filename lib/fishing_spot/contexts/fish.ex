@@ -58,15 +58,28 @@ defmodule FishingSpot.Context.Fish do
     Repo.all(query)
   end
 
-  def get_fishermen_whom_caught_more_than_2_fish() do
+  def get_fishermen_whom_caught_more_than_x_fish(x) do
     query =
       from(fl in FishLanded,
         join: fisherman in assoc(fl, :fisherman),
         group_by: [fl.fisherman_id, fisherman.name],
-        having: count(fl.fisherman_id) > 2,
+        having: count(fl.fisherman_id) > ^x,
         select: %{count: count(fl.fisherman_id), fisherman_name: fisherman.name}
       )
 
     Repo.all(query)
+  end
+
+  def get_fisherman_with_biggest_fish() do
+    query =
+      from(fish in FishLanded,
+        left_join: bigger_fish in FishLanded,
+        on: fish.length < bigger_fish.length,
+        join: fisherman in assoc(fish, :fisherman),
+        where: is_nil(bigger_fish.id),
+        select: %{length: fish.length, name: fisherman.name}
+      )
+
+    Repo.one(query)
   end
 end
